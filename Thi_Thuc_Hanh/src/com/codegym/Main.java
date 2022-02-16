@@ -1,5 +1,6 @@
 package com.codegym;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -76,7 +77,11 @@ public class Main {
                             }
                             break;
                         case 6:
-
+                            ArrayList<Contact> contactArrayList = contactManagement.readFileCSV("contact.csv");
+                            contactArrayList.forEach(System.out::println);
+                            break;
+                        case 7:
+                            contactManagement.writeFileCSV(contactManagement.getContactList(),"contact.csv");
                             break;
                         case 0:
                             flag = false;
@@ -106,7 +111,7 @@ public class Main {
     }
 
     private static Contact inputContac() {
-        System.out.println("▹ Nhập họ tên:");
+        System.out.println("Nhập họ tên:");
         String name = scanner.nextLine();
 
         String phoneNumber;
@@ -134,7 +139,7 @@ public class Main {
         String email;
         do {
             System.out.print("Nhập email: ");
-            System.out.println("<VD: abc@hotmail.com>");
+            System.out.println("<VD: abc@gmail.com>");
             email = scanner.nextLine();
         } while (contactManagement.validateEmail(email));
         Contact contact = new Contact(phoneNumber, group, name, gender, address, dateOfBirth, email);

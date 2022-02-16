@@ -1,6 +1,5 @@
 package com.codegym;
 
-import java.time.LocalDate;
 
 public class Contact {
     private String phoneNumber;
