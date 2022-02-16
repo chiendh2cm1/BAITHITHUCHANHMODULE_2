@@ -1,7 +1,9 @@
-package com.codegym;
+package com.codegym.Model;
 
 
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
     private String phoneNumber;
     private String group;
     private String name;

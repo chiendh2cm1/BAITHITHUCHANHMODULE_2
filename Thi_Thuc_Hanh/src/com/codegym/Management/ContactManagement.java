@@ -1,24 +1,28 @@
-package com.codegym;
+package com.codegym.Management;
+
+import com.codegym.IOFile.ReadFile;
+import com.codegym.IOFile.WriteFile;
+import com.codegym.Model.Contact;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ContactManagement {
-    private final ArrayList<Contact> contactList = new ArrayList<>();
+public class ContactManagement implements WriteFile, ReadFile {
+    private ArrayList<Contact> contactList = new ArrayList<>();
     private static final String PHONE_REGEX = "/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/";//số điện thoại gồm 10 số nếu có nhập số 0 ở đầu tiên. Nếu không nhập 0 thì còn 9 số.
     private static final String EMAIL_REGEX = "^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\\\.[A-Za-z0-9]+)$";// có dạng: abc@hotmail.com
+
     public int size() {
         return contactList.size();
     }
 
     public ContactManagement() {
-        
+        try {
+            readFile("contact.txt");
+        } catch (IOException | ClassNotFoundException e) {
+        }
     }
 
     public ArrayList<Contact> getContactList() {
@@ -37,7 +41,7 @@ public class ContactManagement {
     }
 
     public void displayAll() {
-        System.out.printf("%-20s%-20s%-20s%-20s%-20s\n","Số điện thoại", "Nhóm", "Họ tên", "Giới tính", "Địa chỉ");
+        System.out.printf("%-20s%-20s%-20s%-20s%-20s\n", "Số điện thoại", "Nhóm", "Họ tên", "Giới tính", "Địa chỉ");
         for (Contact contact : contactList) {
             System.out.printf("%-20s%-20s%-20s%-20s%-20s\n", contact.getPhoneNumber(), contact.getGroup(), contact.getName(), contact.getGender(), contact.getAddress());
         }
@@ -45,17 +49,29 @@ public class ContactManagement {
 
     public void addContact(Contact contact) {
         contactList.add(contact);
+        try {
+            writeFile("contact.txt");
+        } catch (IOException e) {
+        }
     }
 
     public void updateContact(String phoneNumber, Contact contact) {
         int index = findContactByPhoneNumber(phoneNumber);
         contactList.set(index, contact);
+        try {
+            writeFile("contact.txt");
+        } catch (IOException e) {
+        }
     }
 
     public boolean deleteContact(String phoneNumber) {
         int index = findContactByPhoneNumber(phoneNumber);
         if (index != -1) {
             contactList.remove(index);
+            try {
+                writeFile("contact.txt");
+            } catch (IOException e) {
+            }
             return true;
         }
         return false;
@@ -104,5 +120,24 @@ public class ContactManagement {
             System.out.println(ioe.getMessage());
         }
         return contacts;
+    }
+
+
+    @Override
+    public void readFile(String path) throws IOException, ClassNotFoundException {
+        InputStream is = new FileInputStream(path);
+        ObjectInputStream ois = new ObjectInputStream(is);
+        contactList = (ArrayList<Contact>) ois.readObject();
+        is.close();
+        ois.close();
+    }
+
+    @Override
+    public void writeFile(String path) throws IOException {
+        OutputStream os = new FileOutputStream(path);
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeObject(contactList);
+        os.close();
+        oos.close();
     }
 }

@@ -1,4 +1,7 @@
-package com.codegym;
+package com.codegym.View;
+
+import com.codegym.Management.ContactManagement;
+import com.codegym.Model.Contact;
 
 import java.util.ArrayList;
 import java.util.Scanner;
