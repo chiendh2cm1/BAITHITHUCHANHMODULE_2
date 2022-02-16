@@ -80,7 +80,7 @@ public class Main {
 
     private static void showCreatContact() {
         System.out.println("------Thêm liên hệ mới------");
-        Contact contact = inputContac();
+        Contact contact = inputContact();
         contactManagement.addContact(contact);
     }
 
@@ -134,23 +134,22 @@ public class Main {
         String phoneNumberUpdate = scanner.nextLine();
         int index = contactManagement.findContactByPhoneNumber(phoneNumberUpdate);
         if (index != -1) {
-            Contact contact1 = inputContac();
+            Contact contact1 = inputContact();
             contactManagement.updateContact(phoneNumberUpdate, contact1);
         } else {
             System.out.println("Cập nhập bị lỗi do không tìm thấy SDT");
         }
     }
 
-    private static Contact inputContac() {
+    private static Contact inputContact() {
         System.out.println("Nhập họ tên:");
         String name = scanner.nextLine();
-
         String phoneNumber;
         do {
             System.out.print("Nhập số điện thoại: ");
             System.out.println("<Gồm 10 số nếu có nhập số 0 ở đầu tiên. Nếu không nhập 0 thì còn 9 số>");
             phoneNumber = scanner.nextLine();
-        } while (contactManagement.validatePhoneNumber(phoneNumber));
+        } while (!contactManagement.validatePhoneNumber(phoneNumber));
 
         System.out.println("Nhập tên nhóm:");
         String group = scanner.nextLine();
@@ -172,7 +171,7 @@ public class Main {
             System.out.print("Nhập email: ");
             System.out.println("<VD: abc@gmail.com>");
             email = scanner.nextLine();
-        } while (contactManagement.validateEmail(email));
+        } while (!contactManagement.validateEmail(email));
         return new Contact(phoneNumber, group, name, gender, address, dateOfBirth, email);
     }
 }
